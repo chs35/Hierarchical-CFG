@@ -1,0 +1,15 @@
+# DreamBooth + LoRA (r=64, all attention) with prior preservation.
+# c = "... with sks style", c_prior = "Photorealistic first-person urban street view".
+inherit: base.yaml
+name: dreambooth_lora
+prompts:
+  set: dreambooth
+finetuner:
+  kind: dreambooth_lora
+  dreambooth:
+    prior_loss_weight: 1.0
+    num_class_images: 100   # generated once with the Base model, shared across runs
+    class_data_dir: null    # default: runs/dreambooth_class_images_1024
+    class_guidance_scale: 5.0
+    class_num_inference_steps: 25
+    class_batch_size: 4

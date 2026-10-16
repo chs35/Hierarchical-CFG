@@ -1,0 +1,19 @@
+{
+  "source": "chs35/Improving-CA-LoRA configs/prompt_augmentations.json v3 (CA-LoRA paper App. B.2). CA measurement only.",
+  "axes": {
+    "style": [
+      "Sketch of first-person urban street view",
+      "Watercolor of first-person urban street view",
+      "Pop-art of first-person urban street view",
+      "Lineart of first-person urban street view",
+      "Oil painting of first-person urban street view"
+    ],
+    "viewpoint": [
+      "Photorealistic urban street in top-down view",
+      "Photorealistic urban street in high angle view",
+      "Photorealistic urban street in low angle view",
+      "Photorealistic urban street in eye-level view",
+      "Photorealistic urban street in close-up view"
+    ]
+  }
+}

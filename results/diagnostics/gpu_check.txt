@@ -1,0 +1,81 @@
+== D0 pytest 2026-09-29 13:28:47 KST
+............................................................ss.......... [ 80%]
+.................                                                        [100%]
+87 passed, 2 skipped in 54.90s
+== D1 configs/vanilla_lora.yaml
+a scale0 max ms_diff_null = 0.0 (expect 0.0)
+a scale0 G_refine == G_refine^Base: True
+b repeat bit-identical: True
+c t | ms_diff_null | layout floor | floor/ms_diff_null
+c  961 | 1.817e-04 | 3.701e-06 | 2.04e-02
+c  641 | 1.207e-03 | 5.513e-06 | 4.57e-03
+c  321 | 9.068e-03 | 1.136e-05 | 1.25e-03
+c    1 | 5.467e-03 | 4.353e-05 | 7.96e-03
+d peak memory 9.6 GB
+== D1 configs/ca_lora_style.yaml
+a scale0 max ms_diff_null = 0.0 (expect 0.0)
+a scale0 G_refine == G_refine^Base: True
+b repeat bit-identical: True
+c t | ms_diff_null | layout floor | floor/ms_diff_null
+c  961 | 1.306e-05 | 3.701e-06 | 2.83e-01
+c  641 | 9.585e-05 | 5.513e-06 | 5.75e-02
+c  321 | 1.212e-04 | 1.136e-05 | 9.37e-02
+c    1 | 6.651e-05 | 4.353e-05 | 6.54e-01
+d peak memory 9.3 GB
+== D2
+pipeline vs hooked loop: bit-identical = True | rel L2 diff = 0.00e+00
+== D4
+D4 PASS
+== D5
+2026-09-29 04:40:41,852 INFO hcfg.diagnostics.run: Resuming /workspace/Hierarchial-CFG/runs/vanilla_lora/diagnostics_pilot_c: 3 units already done
+D5 PASS
+partial files: 0
+== D8
+D8 grep done
+== D6
+    "checks": {
+      "max_ms_diff_null": 0.0,
+      "ti_diff_null_exact_zero": true
+== D3 (reference: samples_d3, 1 image per prompt, same generate settings)
+== D3
+domain/seed0/0000.png: PSNR 27.3 dB
+foggy/seed0/0000.png: PSNR 27.6 dB
+green_truck/seed0/0000.png: PSNR 25.0 dB
+night/seed0/0000.png: PSNR 29.7 dB
+snowy/seed0/0000.png: PSNR 23.7 dB
+suv_motorcycle/seed0/0000.png: PSNR 26.5 dB
+pairs: 6 | min PSNR: 23.7
+== D7
+hcfg.diagnostics.storage.NotPersistentError: /tmp/x/vanilla_lora/diagnostics is not under the persistent volume /workspace: it would be lost when the pod is closed. Write under /workspace (output_dir) or set HCFG_PERSISTENT_ROOT.
+ls: cannot access '/tmp/x': No such file or directory
+OK: 5 run(s) need 11.68 GB incl. margin, 53.47 GB free
+== 7.1 summary (13:48 KST)
+D0 PASS | D1a PASS | D1b PASS | D1c vanilla WARN (floor/ms_diff_null 1.3e-3..2.0e-2), ca_lora_style OVER (5.8e-2..6.5e-1) | D1d PASS 9.6 GB
+D2 PASS (bit-identical) | D3 WARN min PSNR 23.7 dB (same scene layout, detail-level differences: bf16 batch composition differs from the 2-row pipeline batch, amplified over 25 steps)
+D4 PASS | D5 PASS | D6 PASS | D7 PASS (53.5 GB free, need 11.7 GB) | D8 PASS (no warnings)
+pilot speed: 3175 rows in 168 s (~0.053 s/row) -> main run ~25 min/run, ~2.2 h for five
+user decision (13:50 KST): proceed bf16 only (no fp32 cross-check); D3 WARN accepted
+== 7.3 post-checks 15:39:48 KST
+vanilla_lora {'max_ms_diff_null': 0.025197330605875923}
+ca_lora_style {'max_ms_diff_null': 0.0033563139622161398}
+ca_lora_style_dropout {'max_ms_diff_null': 0.004222600150202149}
+dreambooth_lora {'max_ms_diff_null': 0.022846596034434397}
+textual_inversion {'max_ms_diff_null': 0.0, 'ti_diff_null_exact_zero': True}
+same held-out images in all runs: True
+runs/ca_lora_style vs runs/vanilla_lora: eps(Base,null) identical=True (max rel diff 0.0e+00) | G_refine^Base identical=True
+runs/ca_lora_style_dropout vs runs/vanilla_lora: eps(Base,null) identical=True (max rel diff 0.0e+00) | G_refine^Base identical=True
+runs/textual_inversion vs runs/vanilla_lora: eps(Base,null) identical=True (max rel diff 0.0e+00) | G_refine^Base identical=True
+runs/dreambooth_lora vs runs/vanilla_lora: eps(Base,null) identical=True (max rel diff 0.0e+00) | G_refine^Base identical=False
+P1 PASS (TI ti_diff_null_exact_zero=True) | P2 PASS (LoRA-type max_ms_diff_null > 0) | P3 PASS | P4 PASS (bit-identical) | P5 PASS (DreamBooth differs as expected)
+P6 PASS: trajectory images valid (no blank/noise); c_control -> fruit bowls in every run
+bf16 floor on real data (D1c floor / per-t ms_diff_null): ca_lora_style <= 0.074 except trajectory t=961 (0.188); dropout <= 0.038; vanilla <= 0.016
+main runs: vanilla 13:48-14:11, ca_lora_style -14:33, dropout -14:55, dreambooth -15:18, TI -15:39 KST; ~850 MB each
+G1 diagonal (reduced) == standard CFG pipeline, bit-identical: True
+G2 3-branch vs reduced at w1=w2: rel L2 4.15e-01
+G3 speed w1=2.0 w2=7.0: 3.72 s/image (batch 4, sampling only) finite=True
+G3 speed w1=7.0 w2=7.0: 2.49 s/image (batch 4, sampling only) finite=True
+peak memory 9.0 GB
+G2 image 0: PSNR 19.2 dB
+G2 image 1: PSNR 27.3 dB
+G2 image 2: PSNR 27.1 dB
+G2 image 3: PSNR 21.0 dB

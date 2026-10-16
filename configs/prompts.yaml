@@ -1,0 +1,38 @@
+# Training / evaluation prompts (report §4.1-4.2).
+#
+# c        = sets.<set>.domain                (training prompt, "domain")
+# c_refine = c + refine.<key>                 (c is always a prefix of c_refine)
+# prior    = DreamBooth class prompt c_prior  (prior-preservation images)
+#
+# DreamBooth uses the rare token "sks"; TI uses "S*", which the TI fine-tuner
+# replaces with its learned placeholder token ("<s*>").
+sets:
+  default:        # vanilla LoRA, style CA-LoRA, style CA-LoRA + condition dropout
+    domain: "Photorealistic first-person urban street view"
+  dreambooth:
+    domain: "Photorealistic first-person urban street view with sks style"
+    prior: "Photorealistic first-person urban street view"
+  textual_inversion:
+    domain: "Photorealistic first-person urban street view with S* style"
+
+refine:
+  # weather control
+  snowy: ", in snowy weather"
+  foggy: ", in foggy weather"
+  night: ", in dark night"
+  # vehicle control
+  green_truck: ", a green truck on the road"
+  suv_motorcycle: ", a blue SUV and a red motorcycle on the road"
+
+# c_control (diagnostics): a prompt unrelated to the domain. It only drives sampling
+# trajectories in the diagnostics; identical for every set (no S*/sks).
+control: "A bowl of fruit on a wooden table"
+
+# Target attributes of each refine condition, read by the evaluator.
+targets:
+  domain: {weather: clear}
+  snowy: {weather: snowy}
+  foggy: {weather: foggy}
+  night: {weather: night}
+  green_truck: {vehicles: [{type: truck, color: green}]}
+  suv_motorcycle: {vehicles: [{type: SUV, color: blue}, {type: motorcycle, color: red}]}

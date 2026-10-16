@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+.pytest_tmp/
+.pytest_cache/
+runs/
+*.safetensors
+!results/**/*.json

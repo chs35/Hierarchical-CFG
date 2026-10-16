@@ -1,0 +1,119 @@
+# Shared settings for every fine-tuner. Each fine-tuner config inherits this file.
+# Set data.image_dir (and eval.reference_dir) on the GPU server, e.g.
+#   python scripts/train.py --config configs/vanilla_lora.yaml --set data.image_dir=/data/cityscapes_train10
+output_dir: runs
+
+model:
+  kind: sdxl
+  pretrained: stabilityai/stable-diffusion-xl-base-1.0
+  variant: fp16             # half-precision files; cast to weight_dtype after load
+  device: auto
+  weight_dtype: bfloat16    # frozen UNet / text encoders (tensor cores)
+  vae_dtype: float32        # SDXL VAE overflows in fp16; only used for caching/decoding
+  resolution: 1024
+  uncond: zeros             # ∅ = zero prompt_embeds + zero pooled (SDXL force_zeros_for_empty_prompt)
+
+perf:                       # docs/REPRODUCE.md, performance notes
+  allow_tf32: true
+  mixed_precision: bf16
+  channels_last: true
+  gradient_checkpointing: false
+  torch_compile: false
+  fused_optimizer: true
+  cudnn_benchmark: true
+
+data:
+  image_dir: null           # TODO(server): directory with the fixed 10 Cityscapes train images
+  image_list: null          # optional: configs/data/train10.txt pinning the exact files
+  num_images: 10
+  crop: random              # latent-space random crop (paper: random crop + hflip)
+  hflip: true
+
+prompts:
+  file: configs/prompts.yaml
+  set: default
+
+finetuner:
+  lora:
+    rank: 64
+    alpha: 64
+    dropout: 0.0
+    init: gaussian
+    kinds: [q, k, v, out]
+    attn: [1, 2]
+
+train:                      # CA-LoRA paper Table 12 (as in the reference repo)
+  max_steps: 10000
+  batch_size: 1
+  learning_rate: 1.0e-4
+  lr_scheduler: constant
+  lr_warmup_steps: 0
+  max_grad_norm: 1.0
+  cond_dropout: 0.0
+  phi_anchor_lambda: 0.0
+  checkpoint_every: 2000
+  log_every: 50
+  seed: 0
+
+generate:
+  num_inference_steps: 25
+  guidance_scale: 5.0       # diffusers convention (w = 1: no guidance)
+  guidance_rescale: 0.0
+  images_per_prompt: 20     # 20 images per seed
+  seeds: [0]
+  batch_size: 4
+  prompts: [domain, snowy, foggy, night, green_truck, suv_motorcycle]
+
+eval:
+  clip_model: openai/clip-vit-large-patch14
+  cmmd_clip_model: openai/clip-vit-large-patch14-336
+  reference_dir: null       # TODO(server): real Cityscapes images for CMMD (e.g. 500 val images)
+  reference_num_images: 500
+  detector: google/owlv2-base-patch16-ensemble
+  detection_threshold: 0.2
+  run_detection: true
+  batch_size: 16
+
+hcfg:                       # hierarchical CFG + (w1, w2) grid, report §2.3/§4.2 (scripts/sweep.py)
+  variant: basic            # basic | alt_domain | alt_refine
+  w1: [1, 2, 4, 7, 10]      # refine strength
+  w2: [1, 2, 4, 7, 10]      # domain strength
+  schedule: constant        # constant | linear | quadratic (grid value at the first step -> schedule_end at t=0)
+  schedule_end: 1.0
+  reduce_equal_weights: true   # w1(t) = w2(t): reduced 2-branch guidance (basic == standard CFG pipeline)
+  keys: [snowy, foggy, night, green_truck, suv_motorcycle]
+  images_per_prompt: 20     # 20 images per seed
+  seeds: [0]
+  batch_size: 4
+  merge_lora: false         # basic only
+  base_prompt_set: null     # alt_refine Base branches; null = prompts.set (TI overrides: default)
+  image_mb_estimate: 2.0    # disk-check allowance per 1024px PNG (measured mean 1.15, max 1.71 MB)
+  # Diff_Null split (report §7, basic / alt_domain):
+  #   eps(Base,0) + w1*G_refine + w2*G_domain + a*Diff_par + lam*Diff_perp, r = eps(FT,c) - eps(Base,c)
+  split_lambda: null        # null = off; list = lam axis (basic: lam=1, alt_domain: lam=w2 == unsplit)
+  split_par: null           # a; null = the variant's own (basic 1, alt_domain w2)
+  cells: null               # explicit cells instead of the w1 x w2 grid: [[w1, w2], ...] or [[w1, w2, lam], ...]
+
+diagnostics:                # report §3, docs/Implementation detail.md §7 (scripts/diagnose.py)
+  sources: [forward, trajectory]   # forward = q(z_t|x0) on held-out images; trajectory = FT standard-CFG sampling
+  refine_keys: [snowy, foggy, night, green_truck, suv_motorcycle]
+  base_prompt_set: null     # prompt set of the Base branches; null = prompts.set (TI overrides: default)
+  num_heldout: 20           # Cityscapes images outside the 10 training images (needs data.image_list)
+  heldout_seed: 0
+  heldout_list: null        # optional pinned held-out list (relative to data.image_dir)
+  forward_seeds: [0]        # noise draws per held-out image
+  timesteps: null           # null = the sampler's grid (generate.num_inference_steps), shared by both sources
+  trajectory_prompts: [domain, snowy, foggy, night, green_truck, suv_motorcycle, control]
+  seeds: [0, 1, 2, 3]       # z_T seeds (seed consistency, H1 vs H3, needs several)
+  images_per_seed: 2
+  save_images: true         # final image of every trajectory
+  batch_size: 4             # samples per resumable unit
+  max_rows: 16              # UNet micro-batch (rows = branches x samples)
+  save_tensors: []          # e.g. [eps_ft_null, eps_base_null, g_domain] (fp16, --save-tensors)
+  deterministic: true
+
+storage:                    # RunPod: only the network volume /workspace survives closing the pod
+  persistent_root: null     # null = /workspace when RUNPOD_VOLUME_ID is set, else no check; env HCFG_PERSISTENT_ROOT overrides
+  volume_quota_gb: 200      # network volume size, 200 GB since 2026-09-30 (df reports the whole cluster, not this volume)
+  disk_margin: 1.5          # required free = estimate x margin + min_free_gb
+  min_free_gb: 5

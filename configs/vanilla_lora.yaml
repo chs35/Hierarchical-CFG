@@ -1,0 +1,5 @@
+# Vanilla LoRA, r=64 on every attention projection (q, k, v, out of attn1/attn2).
+inherit: base.yaml
+name: vanilla_lora
+finetuner:
+  kind: lora

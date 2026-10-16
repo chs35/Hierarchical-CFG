@@ -1,0 +1,68 @@
+{
+  "image_dir": "<cityscapes>/leftImg8bit/train",
+  "image_list": "configs/data/train10.txt",
+  "selection": "seeded random subset: torch.Generator().manual_seed(0), randperm over the sorted 2975 train images, first 10 indices, kept in sorted order (same method as Controlling-CA-Drift data.subset_size)",
+  "reference_dir": "<cityscapes>/leftImg8bit/val (500 images, CMMD)",
+  "images": [
+    {
+      "file": "bremen/bremen_000130_000019_leftImg8bit.png",
+      "width": 2048,
+      "height": 1024,
+      "sha256": "4941984a05aaf72339b0ab8d1fc51dc15f7e003404797660e9927377d458e050"
+    },
+    {
+      "file": "bremen/bremen_000293_000019_leftImg8bit.png",
+      "width": 2048,
+      "height": 1024,
+      "sha256": "e3f52853d68d8a8d15ad199f7c7a8148d44cc1c88a99d8f22fd0d50eacd00836"
+    },
+    {
+      "file": "erfurt/erfurt_000097_000019_leftImg8bit.png",
+      "width": 2048,
+      "height": 1024,
+      "sha256": "0a172143c25fb06efcac2c69b4294706cdeed1088b35064128e44559572a0196"
+    },
+    {
+      "file": "jena/jena_000035_000019_leftImg8bit.png",
+      "width": 2048,
+      "height": 1024,
+      "sha256": "18375760d646cf887e3e331bc8fdc6206afb60b5ab102f9fef463ade33a973de"
+    },
+    {
+      "file": "monchengladbach/monchengladbach_000000_033683_leftImg8bit.png",
+      "width": 2048,
+      "height": 1024,
+      "sha256": "85f76582e61d4a18e5aad4889a01fab6275671db0e5953c8ed3c4d942e35e60f"
+    },
+    {
+      "file": "strasbourg/strasbourg_000000_036016_leftImg8bit.png",
+      "width": 2048,
+      "height": 1024,
+      "sha256": "a6ee478d3296cf7b2b366359454c9f8f8d6708f2ca712373a3b62a99a0b73b0b"
+    },
+    {
+      "file": "strasbourg/strasbourg_000001_014258_leftImg8bit.png",
+      "width": 2048,
+      "height": 1024,
+      "sha256": "c0d8510a699d39437b9e4c4816013069b60985cca7d3e00a6804d06606856967"
+    },
+    {
+      "file": "stuttgart/stuttgart_000140_000019_leftImg8bit.png",
+      "width": 2048,
+      "height": 1024,
+      "sha256": "585e8d941d0eb60453b925696a48fd7e6e9aafd10217a719554e8212b5056023"
+    },
+    {
+      "file": "tubingen/tubingen_000042_000019_leftImg8bit.png",
+      "width": 2048,
+      "height": 1024,
+      "sha256": "9c17619c3012a4ed0c68da124bf120b3385d451755ce318eb97f76a649565092"
+    },
+    {
+      "file": "weimar/weimar_000044_000019_leftImg8bit.png",
+      "width": 2048,
+      "height": 1024,
+      "sha256": "9ecda4fefd9710a61ec04c1f51a923d13887124c70b1e55c2a6f34de9aac4356"
+    }
+  ]
+}

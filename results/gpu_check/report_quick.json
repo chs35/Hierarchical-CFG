@@ -1,0 +1,261 @@
+{
+  "info": {
+    "stages": [
+      "env",
+      "exact",
+      "tensorcore"
+    ],
+    "python": "3.12.3",
+    "torch": "2.8.0+cu128",
+    "cuda": "12.8",
+    "diffusers": "0.40.0",
+    "transformers": "5.17.0",
+    "gpu": "NVIDIA A100-SXM4-80GB",
+    "gpu_memory_gb": 79.2,
+    "sm": "8.0",
+    "image_source": "synthetic (speed/plumbing only)",
+    "num_attention_projections": 560,
+    "num_head_units": 10400,
+    "ca_lora_ref_selection": {
+      "num_modules": 65,
+      "num_sliced_modules": 65,
+      "num_heads_adapted": 208,
+      "trainable_params": 7749632,
+      "lora_types": {
+        "A": 5,
+        "B": 60
+      }
+    },
+    "stage_seconds_exact": 1341.2,
+    "tensorcore_vanilla_lora": {
+      "tensor_core_share": 1.0,
+      "math_time_ms": 416.5572880000959,
+      "top_non_tensor_core": []
+    },
+    "tensorcore_ca_lora_style": {
+      "tensor_core_share": 1.0,
+      "math_time_ms": 309.95600899998334,
+      "top_non_tensor_core": []
+    },
+    "tensorcore_textual_inversion": {
+      "tensor_core_share": 1.0,
+      "math_time_ms": 364.0090839999726,
+      "top_non_tensor_core": []
+    },
+    "stage_seconds_tensorcore": 1035.8
+  },
+  "checks": [
+    {
+      "stage": "env",
+      "name": "cuda_available",
+      "status": "PASS",
+      "value": true,
+      "detail": ""
+    },
+    {
+      "stage": "env",
+      "name": "gpu_is_a100",
+      "status": "PASS",
+      "value": "NVIDIA A100-SXM4-80GB",
+      "detail": ""
+    },
+    {
+      "stage": "env",
+      "name": "compute_capability>=8.0",
+      "status": "PASS",
+      "value": "8.0",
+      "detail": ""
+    },
+    {
+      "stage": "env",
+      "name": "bf16_supported",
+      "status": "PASS",
+      "value": null,
+      "detail": ""
+    },
+    {
+      "stage": "env",
+      "name": "tf32_matmul_enabled",
+      "status": "PASS",
+      "value": null,
+      "detail": ""
+    },
+    {
+      "stage": "env",
+      "name": "tf32_cudnn_enabled",
+      "status": "PASS",
+      "value": null,
+      "detail": ""
+    },
+    {
+      "stage": "env",
+      "name": "sdpa_flash_available",
+      "status": "PASS",
+      "value": null,
+      "detail": ""
+    },
+    {
+      "stage": "exact",
+      "name": "unet_weight_dtype_bf16",
+      "status": "PASS",
+      "value": "torch.bfloat16",
+      "detail": ""
+    },
+    {
+      "stage": "exact",
+      "name": "vae_dtype_fp32",
+      "status": "PASS",
+      "value": "torch.float32",
+      "detail": ""
+    },
+    {
+      "stage": "exact",
+      "name": "attention_is_sdpa",
+      "status": "PASS",
+      "value": [
+        "AttnProcessor2_0"
+      ],
+      "detail": ""
+    },
+    {
+      "stage": "exact",
+      "name": "base_forward_repeatable",
+      "status": "PASS",
+      "value": 0.0,
+      "detail": "exactness checks below need this; otherwise they fall back to tolerance"
+    },
+    {
+      "stage": "exact",
+      "name": "eps_finite",
+      "status": "PASS",
+      "value": null,
+      "detail": ""
+    },
+    {
+      "stage": "exact",
+      "name": "ref_selection_units",
+      "status": "PASS",
+      "value": 208,
+      "detail": ""
+    },
+    {
+      "stage": "exact",
+      "name": "ref_selection_modules",
+      "status": "PASS",
+      "value": 65,
+      "detail": ""
+    },
+    {
+      "stage": "exact",
+      "name": "vanilla_lora:scale0_equals_base",
+      "status": "PASS",
+      "value": 0.0,
+      "detail": ""
+    },
+    {
+      "stage": "exact",
+      "name": "vanilla_lora:adapter_changes_output",
+      "status": "PASS",
+      "value": 0.16796875,
+      "detail": ""
+    },
+    {
+      "stage": "exact",
+      "name": "vanilla_lora:lora_master_fp32",
+      "status": "PASS",
+      "value": "torch.float32",
+      "detail": ""
+    },
+    {
+      "stage": "exact",
+      "name": "ca_lora_style:scale0_equals_base",
+      "status": "PASS",
+      "value": 0.0,
+      "detail": ""
+    },
+    {
+      "stage": "exact",
+      "name": "ca_lora_style:adapter_changes_output",
+      "status": "PASS",
+      "value": 0.03515625,
+      "detail": ""
+    },
+    {
+      "stage": "exact",
+      "name": "ca_lora_style:lora_master_fp32",
+      "status": "PASS",
+      "value": "torch.float32",
+      "detail": ""
+    },
+    {
+      "stage": "exact",
+      "name": "ca_lora:sliced_modules",
+      "status": "PASS",
+      "value": 65,
+      "detail": ""
+    },
+    {
+      "stage": "exact",
+      "name": "ca_lora:checkpoint_roundtrip",
+      "status": "PASS",
+      "value": 0.0,
+      "detail": ""
+    },
+    {
+      "stage": "exact",
+      "name": "dreambooth_lora:scale0_equals_base",
+      "status": "PASS",
+      "value": 0.0,
+      "detail": ""
+    },
+    {
+      "stage": "exact",
+      "name": "dreambooth_lora:adapter_changes_output",
+      "status": "PASS",
+      "value": 0.13671875,
+      "detail": ""
+    },
+    {
+      "stage": "exact",
+      "name": "dreambooth_lora:lora_master_fp32",
+      "status": "PASS",
+      "value": "torch.float32",
+      "detail": ""
+    },
+    {
+      "stage": "exact",
+      "name": "textual_inversion:diff_null_zero",
+      "status": "PASS",
+      "value": 0.0,
+      "detail": ""
+    },
+    {
+      "stage": "exact",
+      "name": "textual_inversion:token_in_both_tokenizers",
+      "status": "PASS",
+      "value": "Photorealistic first-person urban street view with <s*> style",
+      "detail": ""
+    },
+    {
+      "stage": "tensorcore",
+      "name": "vanilla_lora:tensor_core_share",
+      "status": "PASS",
+      "value": 1.0,
+      "detail": "top non-TC kernels: []"
+    },
+    {
+      "stage": "tensorcore",
+      "name": "ca_lora_style:tensor_core_share",
+      "status": "PASS",
+      "value": 1.0,
+      "detail": "top non-TC kernels: []"
+    },
+    {
+      "stage": "tensorcore",
+      "name": "textual_inversion:tensor_core_share",
+      "status": "PASS",
+      "value": 1.0,
+      "detail": "top non-TC kernels: []"
+    }
+  ]
+}

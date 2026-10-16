@@ -1,0 +1,105 @@
+name: vanilla_lora
+output_dir: runs
+model:
+  kind: sdxl
+  pretrained: stabilityai/stable-diffusion-xl-base-1.0
+  revision: null
+  variant: fp16
+  device: auto
+  weight_dtype: bfloat16
+  vae_dtype: float32
+  resolution: 1024
+  uncond: zeros
+perf:
+  allow_tf32: true
+  mixed_precision: bf16
+  channels_last: true
+  gradient_checkpointing: false
+  torch_compile: false
+  fused_optimizer: true
+  cudnn_benchmark: true
+data:
+  image_dir: /workspace/data/cityscapes/leftImg8bit/train
+  image_list: configs/data/train10.txt
+  num_images: 10
+  crop: random
+  hflip: true
+prompts:
+  file: configs/prompts.yaml
+  set: default
+finetuner:
+  kind: lora
+  lora:
+    rank: 64
+    alpha: 64.0
+    dropout: 0.0
+    init: gaussian
+    kinds:
+    - q
+    - k
+    - v
+    - out
+    attn:
+    - 1
+    - 2
+  selection: null
+  ca:
+    axis: style
+    timestep: 81
+    fraction: 0.02
+    num_samples: 256
+    augs_per_sample: 4
+    augmentation_file: configs/ca_augmentations.json
+    seed: 0
+  dreambooth:
+    prior_loss_weight: 1.0
+    num_class_images: 100
+    class_data_dir: null
+    class_guidance_scale: 5.0
+    class_num_inference_steps: 25
+    class_batch_size: 4
+  textual_inversion:
+    placeholder: S*
+    token: <s*>
+    initializer: style
+    num_vectors: 1
+train:
+  max_steps: 10000
+  batch_size: 1
+  learning_rate: 0.0001
+  lr_scheduler: constant
+  lr_warmup_steps: 0
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  adam_weight_decay: 0.0
+  adam_epsilon: 1.0e-08
+  max_grad_norm: 1.0
+  cond_dropout: 0.0
+  phi_anchor_lambda: 0.0
+  checkpoint_every: 2000
+  log_every: 50
+  seed: 0
+generate:
+  num_inference_steps: 25
+  guidance_scale: 5.0
+  guidance_rescale: 0.0
+  images_per_prompt: 20
+  seeds:
+  - 0
+  batch_size: 4
+  prompts:
+  - domain
+  - snowy
+  - foggy
+  - night
+  - green_truck
+  - suv_motorcycle
+eval:
+  clip_model: openai/clip-vit-large-patch14
+  cmmd_clip_model: openai/clip-vit-large-patch14-336
+  reference_dir: null
+  reference_num_images: 500
+  detector: google/owlv2-base-patch16-ensemble
+  detection_threshold: 0.2
+  run_detection: true
+  batch_size: 16

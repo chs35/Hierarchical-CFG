@@ -1,0 +1,21 @@
+# Control: Textual Inversion (UNet frozen -> Diff_Null == 0 exactly).
+# c = "... with S* style"; S* is registered as the token "<s*>" in both SDXL tokenizers.
+inherit: base.yaml
+name: textual_inversion
+prompts:
+  set: textual_inversion
+finetuner:
+  kind: textual_inversion
+  textual_inversion:
+    placeholder: "S*"
+    token: "<s*>"
+    initializer: style
+    num_vectors: 1
+train:
+  max_steps: 3000           # our choice; diffusers SDXL TI example scale
+  learning_rate: 2.0e-3
+  checkpoint_every: 1000
+diagnostics:
+  base_prompt_set: default  # Base does not know S*: its c / c_refine are the plain prompts
+hcfg:
+  base_prompt_set: default  # alt_refine: G_refine^Base from the plain prompts

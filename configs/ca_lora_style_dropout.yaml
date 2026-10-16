@@ -1,0 +1,5 @@
+# Control: style CA-LoRA + condition dropout (c -> ∅ with p = 0.1; same ∅ as inference).
+inherit: ca_lora_style.yaml
+name: ca_lora_style_dropout
+train:
+  cond_dropout: 0.1

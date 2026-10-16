@@ -1,0 +1,38 @@
+# CPU toy: random tiny SDXL-shaped model, no downloads. Used by tests and scripts/smoke_test.py.
+inherit: base.yaml
+name: tiny_cpu
+model:
+  kind: tiny
+  device: cpu
+  weight_dtype: float32
+  resolution: 32
+perf:
+  mixed_precision: "no"
+  channels_last: false
+train:
+  max_steps: 4
+  log_every: 2
+  checkpoint_every: 0
+generate:
+  num_inference_steps: 2
+  images_per_prompt: 2
+  batch_size: 2
+eval:
+  run_detection: false
+hcfg:
+  w1: [1, 4]
+  w2: [1, 4]
+  keys: [snowy]
+  images_per_prompt: 2
+  batch_size: 2
+  image_mb_estimate: 0.01
+diagnostics:
+  refine_keys: [snowy, foggy]
+  num_heldout: 2
+  trajectory_prompts: [domain, snowy, control]
+  seeds: [0, 1]
+  images_per_seed: 1
+  batch_size: 2
+  max_rows: 4
+storage:
+  volume_quota_gb: null     # no `du` of the whole volume per test run; quota mode is tested with a stub

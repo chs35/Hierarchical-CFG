@@ -1,0 +1,30 @@
+{
+  "run": "textual_inversion",
+  "finetuner": "textual_inversion",
+  "final_checkpoint": "/workspace/Hierarchial-CFG/runs/textual_inversion/finetuner-final.safetensors",
+  "steps": 3000,
+  "trainable_params": 2048,
+  "train_prompt": "Photorealistic first-person urban street view with <s*> style",
+  "prior_prompt": null,
+  "num_train_images": 10,
+  "train_images": [
+    "/workspace/data/cityscapes/leftImg8bit/train/bremen/bremen_000130_000019_leftImg8bit.png",
+    "/workspace/data/cityscapes/leftImg8bit/train/bremen/bremen_000293_000019_leftImg8bit.png",
+    "/workspace/data/cityscapes/leftImg8bit/train/erfurt/erfurt_000097_000019_leftImg8bit.png",
+    "/workspace/data/cityscapes/leftImg8bit/train/jena/jena_000035_000019_leftImg8bit.png",
+    "/workspace/data/cityscapes/leftImg8bit/train/monchengladbach/monchengladbach_000000_033683_leftImg8bit.png",
+    "/workspace/data/cityscapes/leftImg8bit/train/strasbourg/strasbourg_000000_036016_leftImg8bit.png",
+    "/workspace/data/cityscapes/leftImg8bit/train/strasbourg/strasbourg_000001_014258_leftImg8bit.png",
+    "/workspace/data/cityscapes/leftImg8bit/train/stuttgart/stuttgart_000140_000019_leftImg8bit.png",
+    "/workspace/data/cityscapes/leftImg8bit/train/tubingen/tubingen_000042_000019_leftImg8bit.png",
+    "/workspace/data/cityscapes/leftImg8bit/train/weimar/weimar_000044_000019_leftImg8bit.png"
+  ],
+  "train_time_sec": 775.8939196737483,
+  "checkpoint_time_sec": 0.011137940920889378,
+  "sec_per_step_mean": 0.2586313065579161,
+  "peak_memory_gb": 12.773761749267578,
+  "final_loss": 0.06548798084259033,
+  "autocast": "torch.bfloat16",
+  "weight_dtype": "torch.bfloat16",
+  "uncond": "zeros"
+}

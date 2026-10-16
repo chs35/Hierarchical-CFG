@@ -1,0 +1,16 @@
+# Style CA-LoRA: sliced LoRA (r=64) on the top-2% style-CA heads (t = 81).
+# Produce the selection first:  python scripts/measure_ca.py --config configs/ca_lora_style.yaml
+# Or use the reference repo's selection: --set finetuner.selection=configs/selections/ref_style_t81.json
+inherit: base.yaml
+name: ca_lora_style
+finetuner:
+  kind: ca_lora
+  selection: runs/ca_selection/selection_style_t81.json
+  ca:
+    axis: style
+    timestep: 81
+    fraction: 0.02
+    num_samples: 256        # cycles over the 10 training images with fresh noise
+    augs_per_sample: 4
+    augmentation_file: configs/ca_augmentations.json
+    seed: 0

@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hcfg"
+version = "0.1.0"
+description = "Hierarchical CFG for fine-tuned diffusion models (SDXL): fine-tuners, generation, diagnostics, evaluation"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.2",
+    "numpy>=1.24",
+    "safetensors>=0.4",
+    "PyYAML>=6.0",
+    "Pillow>=10.0",
+    "diffusers>=0.30",
+    "transformers>=4.44",
+    "accelerate>=0.30",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "matplotlib>=3.8",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning", "ignore::FutureWarning"]
+# Keep tmp_path inside the project: the default under %LOCALAPPDATA%\Temp can be
+# permission-locked on Windows.
+addopts = "--basetemp=.pytest_tmp"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

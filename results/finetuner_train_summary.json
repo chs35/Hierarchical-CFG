@@ -1,0 +1,110 @@
+[
+  {
+    "run": "vanilla_lora",
+    "steps": 10000,
+    "last_logged_step": 10000,
+    "params": 92897280,
+    "prompt": "Photorealistic first-person urban street view",
+    "n_images": 10,
+    "train_min": 70.8,
+    "s_per_step": 0.425,
+    "peak_gb": 13.0,
+    "final_loss": 0.1411,
+    "nonfinite_logged": 0,
+    "checkpoints": [
+      "checkpoint-002000.safetensors",
+      "checkpoint-004000.safetensors",
+      "checkpoint-006000.safetensors",
+      "checkpoint-008000.safetensors",
+      "finetuner-final.safetensors"
+    ],
+    "nonfinite_ckpt": [],
+    "final_mb": 354.7
+  },
+  {
+    "run": "ca_lora_style",
+    "steps": 10000,
+    "last_logged_step": 10000,
+    "params": 7749632,
+    "prompt": "Photorealistic first-person urban street view",
+    "n_images": 10,
+    "train_min": 33.3,
+    "s_per_step": 0.2,
+    "peak_gb": 10.4,
+    "final_loss": 0.1627,
+    "nonfinite_logged": 0,
+    "checkpoints": [
+      "checkpoint-002000.safetensors",
+      "checkpoint-004000.safetensors",
+      "checkpoint-006000.safetensors",
+      "checkpoint-008000.safetensors",
+      "finetuner-final.safetensors"
+    ],
+    "nonfinite_ckpt": [],
+    "final_mb": 29.6
+  },
+  {
+    "run": "dreambooth_lora",
+    "steps": 10000,
+    "last_logged_step": 10000,
+    "params": 92897280,
+    "prompt": "Photorealistic first-person urban street view with sks style",
+    "n_images": 10,
+    "train_min": 72.4,
+    "s_per_step": 0.434,
+    "peak_gb": 19.9,
+    "final_loss": 0.5104,
+    "nonfinite_logged": 0,
+    "checkpoints": [
+      "checkpoint-002000.safetensors",
+      "checkpoint-004000.safetensors",
+      "checkpoint-006000.safetensors",
+      "checkpoint-008000.safetensors",
+      "finetuner-final.safetensors"
+    ],
+    "nonfinite_ckpt": [],
+    "final_mb": 354.7
+  },
+  {
+    "run": "textual_inversion",
+    "steps": 3000,
+    "last_logged_step": 3000,
+    "params": 2048,
+    "prompt": "Photorealistic first-person urban street view with <s*> style",
+    "n_images": 10,
+    "train_min": 12.9,
+    "s_per_step": 0.259,
+    "peak_gb": 12.8,
+    "final_loss": 0.0655,
+    "nonfinite_logged": 0,
+    "checkpoints": [
+      "checkpoint-001000.safetensors",
+      "checkpoint-002000.safetensors",
+      "finetuner-final.safetensors"
+    ],
+    "nonfinite_ckpt": [],
+    "final_mb": 0.0
+  },
+  {
+    "run": "ca_lora_style_dropout",
+    "steps": 10000,
+    "last_logged_step": 10000,
+    "params": 7749632,
+    "prompt": "Photorealistic first-person urban street view",
+    "n_images": 10,
+    "train_min": 33.5,
+    "s_per_step": 0.201,
+    "peak_gb": 10.4,
+    "final_loss": 0.2919,
+    "nonfinite_logged": 0,
+    "checkpoints": [
+      "checkpoint-002000.safetensors",
+      "checkpoint-004000.safetensors",
+      "checkpoint-006000.safetensors",
+      "checkpoint-008000.safetensors",
+      "finetuner-final.safetensors"
+    ],
+    "nonfinite_ckpt": [],
+    "final_mb": 29.6
+  }
+]
